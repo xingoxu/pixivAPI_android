@@ -18,8 +18,20 @@ import com.xingoxu.pixivapi.*;
 
 public class MainActivity extends AppCompatActivity {
     /*
+    the content deleted in gradle build:
         compile fileTree(include: ['*.jar'], dir: 'libs')
      */
+
+    private static class myHandlerClass extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            button.setText("SUCCESS");
+        }
+    }
+
+    private static Button button;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,15 +40,9 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 
-        final Button button = (Button) this.findViewById(R.id.button);
+        button = (Button) this.findViewById(R.id.button);
 
-        final Handler handler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                button.setText("SUCCESS");
-            }
-        };
+        final Handler handler = new myHandlerClass();
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("MainActivity", "OAuth request has been sent");
             }
         });
-
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);

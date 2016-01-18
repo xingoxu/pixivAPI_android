@@ -5,6 +5,7 @@ import android.content.Context;
 import com.loopj.android.http.RequestHandle;
 import com.loopj.android.http.RequestParams;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 
@@ -119,7 +120,7 @@ public class pixivAPI {
         return OAuth.GetAsync(api, null, parameters, responseHandler, context);
     }
 
-    public RequestHandle my_favourite_work_add(String pixivWorkid, publicity _publicity, AbstractPixivResponseHandler responseHandler, Context context) {
+    public RequestHandle my_favourite_work_addAsync(String pixivWorkid, publicity _publicity, AbstractPixivResponseHandler responseHandler, Context context) {
         String api = "https://public-api.secure.pixiv.net/v1/me/favorite_works.json";
 
         checkIsID(pixivWorkid);
@@ -157,7 +158,7 @@ public class pixivAPI {
      * @param _publicity   @nullable Recommended if we can get the publicity
      * @return
      */
-    public RequestHandle my_favourite_works_delete(List<String> pixivWorkids, publicity _publicity, AbstractPixivResponseHandler responseHandler, Context context) {
+    public RequestHandle my_favourite_works_deleteAsync(List<String> pixivWorkids, publicity _publicity, AbstractPixivResponseHandler responseHandler, Context context) {
         String api = "https://public-api.secure.pixiv.net/v1/me/favorite_works.json";
 
 
@@ -180,7 +181,7 @@ public class pixivAPI {
 
     }
 
-    public RequestHandle my_following_works(int page, AbstractPixivResponseHandler responseHandler, Context context) {
+    public RequestHandle my_following_worksAsync(int page, AbstractPixivResponseHandler responseHandler, Context context) {
         String api = "https://public-api.secure.pixiv.net/v1/me/following/works.json";
 
         RequestParams params = new RequestParams();
@@ -196,7 +197,7 @@ public class pixivAPI {
         return OAuth.GetAsync(api, null, params, responseHandler, context);
     }
 
-    public RequestHandle my_following_user(int page, publicity _publicity, AbstractPixivResponseHandler responseHandler, Context context) {
+    public RequestHandle my_following_userAsync(int page, publicity _publicity, AbstractPixivResponseHandler responseHandler, Context context) {
         String api = "https://public-api.secure.pixiv.net/v1/me/following.json";
 
         String publicity = "public";
@@ -214,7 +215,7 @@ public class pixivAPI {
         return OAuth.GetAsync(api, null, params, responseHandler, context);
     }
 
-    public RequestHandle my_following_user_follow(String user_id, publicity _publicity, AbstractPixivResponseHandler responseHandler, Context context) {
+    public RequestHandle my_following_user_followAsync(String user_id, publicity _publicity, AbstractPixivResponseHandler responseHandler, Context context) {
         String api = "https://public-api.secure.pixiv.net/v1/me/favorite-users.json";
 
         checkIsID(user_id);
@@ -239,7 +240,7 @@ public class pixivAPI {
      * @param context
      * @return
      */
-    public RequestHandle my_following_user_unfollow(List<String> user_ids, publicity _publicity, AbstractPixivResponseHandler responseHandler, Context context) {
+    public RequestHandle my_following_user_unfollowAsync(List<String> user_ids, publicity _publicity, AbstractPixivResponseHandler responseHandler, Context context) {
         String api = "https://public-api.secure.pixiv.net/v1/me/favorite-users.json";
 
         String publicity = null;
@@ -260,4 +261,204 @@ public class pixivAPI {
         return OAuth.DeleteAsync(api, null, parameters, responseHandler, context);
     }
 
+    public RequestHandle user_worksAsync(String user_id, int page, AbstractPixivResponseHandler responseHandler, Context context) {
+        this.checkIsID(user_id);
+        String api = "https://public-api.secure.pixiv.net/v1/users/" + user_id + "/works.json";
+
+        RequestParams params = new RequestParams();
+        {
+            params.put("page", page);
+            params.put("per_page", 30);
+            params.put("include_stats", true);
+            params.put("include_sanity_level", true);
+            params.put("image_sizes", "px_128x128,px_480mw,large");
+        }
+
+        return OAuth.GetAsync(api, null, params, responseHandler, context);
+
+    }
+
+    public RequestHandle user_favourite_worksAsync(String user_id, int page, AbstractPixivResponseHandler responseHandler, Context context) {
+        this.checkIsID(user_id);
+
+        String api = "https://public-api.secure.pixiv.net/v1/users/" + user_id + "/favorite_works.json";
+        RequestParams params = new RequestParams();
+        {
+            params.put("page", page);
+            params.put("per_page", 30);
+            params.put("include_sanity_level", true);
+            params.put("image_sizes", "px_128x128,px_480mw,large");
+        }
+
+        return OAuth.GetAsync(api, null, params, responseHandler, context);
+    }
+
+    public RequestHandle user_feedsAsync(String user_id, boolean show_r18, String max_id, AbstractPixivResponseHandler responseHandler, Context context) {
+        this.checkIsID(user_id);
+
+        String api = "https://public-api.secure.pixiv.net/v1/users/" + user_id + "/feeds.json";
+
+        RequestParams parameters = new RequestParams();
+
+        int r18 = 0;
+        if (show_r18) r18 = 1;
+
+        {
+            parameters.put("relation", "all");
+            parameters.put("type", "touch_nottext");
+            parameters.put("show_r18", r18);
+        }
+
+        if (max_id != null) parameters.put("max_id", max_id);
+
+        return OAuth.GetAsync(api, null, parameters, responseHandler, context);
+    }
+
+    public RequestHandle user_following_userAsync(String user_id, int page, AbstractPixivResponseHandler responseHandler, Context context) {
+        this.checkIsID(user_id);
+
+        String api = "https://public-api.secure.pixiv.net/v1/users/" + user_id + "/following.json";
+
+
+        RequestParams params = new RequestParams();
+
+        {
+            params.put("page", page);
+            params.put("per_page", 30);
+        }
+
+        return OAuth.GetAsync(api, null, params, responseHandler, context);
+    }
+
+    public enum RankingType {
+        all, illust, manga, ugoira;
+    }
+
+    public enum RankingMode {
+        daily, weekly, monthly, rookie, original, male, female, daily_r18, weekly_r18, male_r18, female_r18, r18g
+    }
+
+    /**
+     * @param type            [all, illust, manga, ugoira]
+     * @param mode            [daily, weekly, monthly, rookie, original, male, female, daily_r18, weekly_r18, male_r18, female_r18, r18g]
+     *                        <p>  for 'illust' & 'manga': [daily, weekly, monthly, rookie, daily_r18, weekly_r18, r18g]</p>
+     *                        <p>  for 'ugoira': [daily, weekly, daily_r18, weekly_r18]</p>
+     * @param page            1-n
+     * @param date            start from yesterday,should set year,month,day
+     * @param responseHandler
+     * @param context
+     * @return
+     */
+    public RequestHandle rankingAsync(RankingType type, RankingMode mode, int page, Date date, AbstractPixivResponseHandler responseHandler, Context context) {
+
+
+        if (type != RankingType.all) {
+            List<RankingMode> modes = null;
+            //check mode is available
+            if (type == RankingType.illust || type == RankingType.manga)
+                modes = Arrays.asList(RankingMode.daily, RankingMode.weekly, RankingMode.monthly, RankingMode.rookie, RankingMode.daily_r18, RankingMode.weekly_r18, RankingMode.r18g);
+            if (type == RankingType.ugoira)
+                modes = Arrays.asList(RankingMode.daily, RankingMode.weekly, RankingMode.daily_r18, RankingMode.weekly_r18);
+
+            if (!modes.contains(mode)) throw new RuntimeException("Mode not expected!");
+        }
+
+        String api = "https://public-api.secure.pixiv.net/v1/ranking/" + mode + ".json";
+
+        RequestParams params = new RequestParams();
+
+        {
+            params.put("mode", "" + mode);
+            params.put("page", page);
+            params.put("per_page", 50);
+            params.put("include_stats", true);
+            params.put("include_sanity_level", true);
+            params.put("image_sizes", "px_128x128,px_480mw,large");
+            params.put("profile_image_sizes", "px_170x170,px_50x50");
+            if (date != null)
+                params.put("date", (new SimpleDateFormat("yyyy-MM-dd")).format(date));
+        }
+
+        return OAuth.GetAsync(api, null, params, responseHandler, context);
+    }
+
+    /**
+     * text - 标题/描述 title/description <p></p>
+     * tag - 非精确标签 not exact tag <p></p>
+     * exact_tag - 精确标签 exact tag<p></p>
+     * caption - 描述 description<p></p>
+     */
+    public enum SearchMode {
+        text, tag, exact_tag, caption
+    }
+
+    public enum SearchPeriod {
+        all, day, week, month
+    }
+
+    /**
+     * desc - 从新到旧 <p></p>
+     * asc - 从旧到新
+     */
+    public enum SearchOrder {
+        desc, asc
+    }
+
+    /**
+     * now only date
+     */
+    public enum SearchSort {
+        date
+    }
+
+    public enum SearchType {
+        illustration, manga, ugoira
+    }
+
+    public RequestHandle search_worksAsync(String query, int page, SearchMode mode, SearchPeriod period, SearchOrder order, SearchSort sort, AbstractPixivResponseHandler responseHandler, Context context, SearchType... types) {
+        List<SearchType> typeList = Arrays.asList(types);
+
+        String searchtype = "";
+        if (typeList.contains(SearchType.illustration)) searchtype += SearchType.illustration + ",";
+        if (typeList.contains(SearchType.manga)) searchtype += SearchType.manga + ",";
+        if (typeList.contains(SearchType.ugoira)) searchtype += SearchType.ugoira + ",";
+
+        searchtype = searchtype.substring(0, searchtype.length() - 1);
+
+        String api = "https://public-api.secure.pixiv.net/v1/search/works.json";
+
+        RequestParams params = new RequestParams();
+        {
+            params.put("q", query);
+            params.put("page", page);
+            params.put("per_page", 30);
+            params.put("period", period + "");
+            params.put("order", order + "");
+            params.put("sort", sort + "");
+            params.put("mode", mode + "");
+            params.put("types", searchtype);
+            params.put("include_stats", true);
+            params.put("include_sanity_level", true);
+            params.put("image_sizes", "px_128x128,px_480mw,large");
+        }
+
+        return OAuth.GetAsync(api, null, params, responseHandler, context);
+    }
+
+    public RequestHandle latest_worksAsync(int page, AbstractPixivResponseHandler responseHandler, Context context) {
+        String api = "https://public-api.secure.pixiv.net/v1/search/works.json";
+
+        RequestParams params = new RequestParams();
+        {
+            params.put("page", page);
+            params.put("per_page", 30);
+            params.put("include_stats", true);
+            params.put("include_sanity_level", true);
+            params.put("image_sizes", "px_128x128,px_480mw,large");
+            params.put("profile_image_sizes", "px_170x170,px_50x50");
+        }
+
+        return OAuth.GetAsync(api, null, params, responseHandler, context);
+
+    }
 }
