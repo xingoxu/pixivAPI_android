@@ -13,7 +13,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 
 /**
- *
  * Created by xingo on 1/15/2016.
  */
 public class pixivOAuth {
@@ -43,14 +42,14 @@ public class pixivOAuth {
      * @return
      * @throws Exception Missing both username and refresh_token
      */
-    public RequestHandle authAsync(String username, String password, final Handler handler, Context context){
+    public RequestHandle authAsync(String username, String password, final Handler handler, Context context) {
 
 
         String api = "https://oauth.secure.pixiv.net/auth/token";
         Map<String, String> header = new HashMap<>();
         header.put("Referer", "http://www.pixiv.net/");
 
-        RequestParams parameters=new RequestParams();
+        RequestParams parameters = new RequestParams();
 
         parameters.put("client_id", "bYGKuGVw91e0NMfPGp44euvGt59s");
         parameters.put("client_secret", "HP3RmkgAmEGro0gn1x9ioawQE8WMfvLXDz3ZqxpK");
@@ -76,6 +75,10 @@ public class pixivOAuth {
 
                 if (message.arg1 != pixivOAuthResponseHandler.OAuthResponseMessage_ID1)
                     return;
+
+                Message messageWaitToSent = new Message();
+                messageWaitToSent.arg1 = pixivOAuthResponseHandler.OAuthResponseMessage_ID1;
+
                 if (message.arg2 == pixivOAuthResponseHandler.OAuthSuccessMessage_ID) {
                     if (message.obj instanceof pixivLoginUser) {
                         pixivOAuth.this.user = (pixivLoginUser) message.obj;
@@ -85,12 +88,18 @@ public class pixivOAuth {
                         _outerUser.setName(pixivOAuth.this.user.getName());
                         _outerUser.setExpires_time(pixivOAuth.this.user.getExpires_time());
                         pixivOAuth.this.outerUser = _outerUser;
-                        message.obj = _outerUser;
-                    }
-                } else
-                    Log.w("pixivOAuth", "Auth Failed, reason has logged.");
 
-                handler.sendMessage(message);
+                        messageWaitToSent.arg2 = pixivOAuthResponseHandler.OAuthSuccessMessage_ID;
+                        messageWaitToSent.obj = _outerUser;
+                    } else {
+                        throw new RuntimeException("unknown error");
+                    }
+                } else {
+                    messageWaitToSent.arg2 = pixivOAuthResponseHandler.OAuthFailedMessage_ID;
+                    Log.w("pixivOAuth", "Auth Failed, reason has logged.");
+                }
+
+                handler.sendMessage(messageWaitToSent);
             }
         };
 

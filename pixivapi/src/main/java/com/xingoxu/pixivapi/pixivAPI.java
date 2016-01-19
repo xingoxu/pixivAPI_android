@@ -15,6 +15,10 @@ import java.util.*;
 public class pixivAPI {
     private pixivOAuth OAuth;
 
+    public pixivOAuth getOAuth() {
+        return OAuth;
+    }
+
     private boolean checkIsID(String id) {
         if (id == null) throw new NullPointerException();
         if (id.equals("")) throw new RuntimeException("ID is not correct!");

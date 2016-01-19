@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.xingoxu.pixivapi_in_android.MediumPictureSquareViewLayoutBase xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="3dp">
+
+    <com.xingoxu.pixivapi_in_android.MediumPictureSquareView
+        android:id="@+id/mediumPicSqrView_pixivImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorAccent"
+        >
+    </com.xingoxu.pixivapi_in_android.MediumPictureSquareView>
+    <com.xingoxu.pixivapi_in_android.MediumPictureSquareView
+        android:id="@+id/mediumPicSqrView_chooseModeImage"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:src="@android:drawable/btn_star_big_on"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp">
+    </com.xingoxu.pixivapi_in_android.MediumPictureSquareView>
+</com.xingoxu.pixivapi_in_android.MediumPictureSquareViewLayoutBase>

@@ -18,7 +18,7 @@ public abstract class AbstractPixivResponseHandler extends JsonHttpResponseHandl
     @Override
     public void onSuccess(int statusCode, Header[] headers, String responseString) {
         super.onSuccess(statusCode, headers, responseString);
-        Log.d("APixivResHand.String", responseString);
+        Log.v("APixivResHand.String", responseString);
     }
 
     /**
@@ -31,7 +31,7 @@ public abstract class AbstractPixivResponseHandler extends JsonHttpResponseHandl
     @Override
     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
         super.onSuccess(statusCode, headers, response);
-        Log.d("APixivResHand.JObject", response.toString());
+        Log.v("APixivResHand.JObject", response.toString());
     }
 
     /**
@@ -44,7 +44,7 @@ public abstract class AbstractPixivResponseHandler extends JsonHttpResponseHandl
     @Override
     public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
         super.onSuccess(statusCode, headers, response);
-        Log.d("APixivResHand.JArray", response.toString());
+        Log.v("APixivResHand.JArray", response.toString());
     }
 
     /**
@@ -58,7 +58,7 @@ public abstract class AbstractPixivResponseHandler extends JsonHttpResponseHandl
     @Override
     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
         super.onFailure(statusCode, headers, throwable, errorResponse);
-        Log.d("APixivResHand.JObjectFail", errorResponse.toString());
+        Log.v("APixivResHand.JObjectFail", errorResponse.toString());
     }
 
     /**
@@ -72,12 +72,12 @@ public abstract class AbstractPixivResponseHandler extends JsonHttpResponseHandl
     @Override
     public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
         super.onFailure(statusCode, headers, throwable, errorResponse);
-        Log.d("APixivResHand.JArrayFail", errorResponse.toString());
+        Log.v("APixivResHand.JArrayFail", errorResponse.toString());
     }
 
     @Override
     public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
         super.onFailure(statusCode, headers, responseString, throwable);
-        Log.d("APixivResHand.StringFail", responseString.toString());
+        Log.v("APixivResHand.StringFail", responseString.toString());
     }
 }
