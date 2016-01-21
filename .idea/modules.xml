@@ -2,9 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/PixivAPI-in-Android.iml" filepath="$PROJECT_DIR$/PixivAPI-in-Android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MyApplication.iml" filepath="$PROJECT_DIR$/MyApplication.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android-async-http-1.4.9/android-async-http-1.4.9.iml" filepath="$PROJECT_DIR$/android-async-http-1.4.9/android-async-http-1.4.9.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/pixivapi/pixivapi.iml" filepath="$PROJECT_DIR$/pixivapi/pixivapi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/recyclerview-multiselect-release/recyclerview-multiselect-release.iml" filepath="$PROJECT_DIR$/recyclerview-multiselect-release/recyclerview-multiselect-release.iml" />
     </modules>
   </component>
 </project>

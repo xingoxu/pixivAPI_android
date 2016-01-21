@@ -1,6 +1,5 @@
 package com.xingoxu.pixivapi;
 
-import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
 

@@ -1,1 +1,1 @@
-include ':app', ':pixivapi'
+include ':app', ':android-async-http-1.4.9', ':pixivapi', ':recyclerview-multiselect-release'

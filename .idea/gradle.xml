@@ -10,8 +10,10 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/android-async-http-1.4.9" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/pixivapi" />
+            <option value="$PROJECT_DIR$/recyclerview-multiselect-release" />
           </set>
         </option>
       </GradleProjectSettings>

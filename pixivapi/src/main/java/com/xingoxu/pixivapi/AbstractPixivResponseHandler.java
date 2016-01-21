@@ -1,6 +1,5 @@
 package com.xingoxu.pixivapi;
 
-import android.annotation.SuppressLint;
 import android.util.Log;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
